@@ -1,0 +1,71 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'title' => 'የሪፖርት ማዕከል',
+    'subtitle' => 'ኦፕሬሽንና ፋይናንስ ሪፖርቶችን ከማውጣት በፊት በማያ ላይ ይመልከቱ።',
+    'inventory' => 'የእቃ ሪፖርት',
+    'inventory_subtitle' => 'ከማውጣት በፊት የእቃ ቀሪን በምርት እና በመጋዘን ይመልከቱ።',
+    'low_stock' => 'ዝቅተኛ እቃ ሪፖርት',
+    'low_stock_subtitle' => 'እጥረት ከመፈጠሩ በፊት ዝቅተኛ/ከእቃ ውጭ ያሉ ምርቶችን ይለዩ።',
+    'sales' => 'የሽያጭ ሪፖርት',
+    'sales_subtitle' => 'የትዕዛዝ ጠቅላላ፣ ክፍያ እና የደንበኛ አፈጻጸም ይከታተሉ።',
+    'purchase' => 'የግዢ ሪፖርት',
+    'purchase_subtitle' => 'የአቅራቢ ግዢ፣ ጠቅላላ እና የመቀበያ ሂደት ይመልከቱ።',
+    'profit' => 'የትርፍ ሪፖርት',
+    'profit_subtitle' => 'ገቢ፣ ግምት ወጪ እና የትርፍ መጠንን በትዕዛዝ ይመልከቱ።',
+    'valuation' => 'የእቃ ግምት ሪፖርት',
+    'valuation_subtitle' => 'የእቃ ዋጋን በምርት እና በመጋዘን ይከታተሉ።',
+
+    'view_report' => 'ሪፖርት እይ',
+    'run_report' => 'ሪፖርት አሂድ',
+    'export_pdf' => 'PDF አውጣ',
+    'export_excel' => 'Excel አውጣ',
+    'export_csv' => 'CSV አውጣ',
+    'exported_at' => 'የተወጣበት ጊዜ',
+    'generated_by' => 'ያዘጋጀው',
+    'applied_filters' => 'የተተገበሩ ማጣሪያዎች',
+
+    'search_product_sku' => 'ምርት ወይም SKU ፈልግ',
+    'search_order' => 'የትዕዛዝ ቁጥር ፈልግ',
+    'order_number' => 'የትዕዛዝ ቁጥር',
+    'supplier' => 'አቅራቢ',
+    'from_date' => 'ከቀን',
+    'to_date' => 'እስከ ቀን',
+    'stock_scope' => 'የእቃ ክልል',
+    'all_low_stock' => 'ሁሉም ዝቅተኛ እቃ',
+    'out_of_stock_only' => 'ከእቃ ውጭ ብቻ',
+
+    'total_products' => 'ጠቅላላ ምርቶች',
+    'total_quantity' => 'ጠቅላላ መጠን',
+    'total_warehouses' => 'ጠቅላላ መጋዘኖች',
+    'total_stock_value' => 'ጠቅላላ የእቃ ዋጋ',
+    'total_inventory_value' => 'ጠቅላላ የእቃ ግምት',
+    'total_value' => 'ጠቅላላ ዋጋ',
+    'highest_value_warehouse' => 'ከፍተኛ ዋጋ ያለው መጋዘን',
+    'below_threshold' => 'ከገደብ በታች',
+    'out_of_stock_count' => 'ከእቃ ውጭ ብዛት',
+    'current_stock' => 'ያለው እቃ',
+    'shortage' => 'እጥረት',
+
+    'total_orders' => 'ጠቅላላ ትዕዛዞች',
+    'total_revenue' => 'ጠቅላላ ገቢ',
+    'total_paid' => 'ጠቅላላ የተከፈለ',
+    'total_outstanding' => 'ጠቅላላ ያልተከፈለ',
+    'balance' => 'ቀሪ',
+
+    'total_purchase_orders' => 'ጠቅላላ የግዢ ትዕዛዞች',
+    'total_supplier_spend' => 'ጠቅላላ የአቅራቢ ወጪ',
+    'received_qty' => 'የተቀበለ መጠን',
+    'total_received_qty' => 'ጠቅላላ የተቀበለ መጠን',
+
+    'revenue' => 'ገቢ',
+    'cost' => 'ወጪ',
+    'gross_profit' => 'ጠቅላላ ትርፍ',
+    'profit_value' => 'ትርፍ',
+    'margin_percent' => 'የትርፍ %',
+
+    'no_data_title' => 'የሪፖርት መረጃ አልተገኘም',
+    'no_data_description' => 'ከተመረጡት ማጣሪያዎች ጋር የሚመጣ ውጤት የለም። ማጣሪያዎቹን ያስተካክሉ እና እንደገና ያሂዱ።',
+];
