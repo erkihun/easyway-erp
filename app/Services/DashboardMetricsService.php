@@ -15,6 +15,13 @@ class DashboardMetricsService
     {
         $todaySales = (float) DB::table('sales_orders')->whereDate('order_date', now()->toDateString())->sum('total_amount');
         $monthlyRevenue = (float) DB::table('invoices')->whereMonth('invoice_date', now()->month)->whereYear('invoice_date', now()->year)->sum('total_amount');
+        $invoicesThisMonth = (int) DB::table('invoices')->whereMonth('invoice_date', now()->month)->whereYear('invoice_date', now()->year)->count();
+        $outstandingPayments = (float) DB::table('invoices')->selectRaw('SUM(GREATEST(total_amount - paid_amount, 0)) as balance')->value('balance');
+        $overdueInvoices = (int) DB::table('invoices')
+            ->where('status', 'issued')
+            ->whereNotNull('due_date')
+            ->whereDate('due_date', '<', now()->toDateString())
+            ->count();
 
         $topSellingProducts = DB::table('sales_order_items')
             ->select('products.name', DB::raw('SUM(sales_order_items.quantity) as qty'))
@@ -89,6 +96,9 @@ class DashboardMetricsService
             'outOfStockItems' => $outOfStockItems,
             'todaySales' => $todaySales,
             'monthlyRevenue' => $monthlyRevenue,
+            'invoicesThisMonth' => $invoicesThisMonth,
+            'outstandingPayments' => $outstandingPayments,
+            'overdueInvoices' => $overdueInvoices,
             'topSellingProducts' => $topSellingProducts,
             'recentActivities' => ActivityLog::query()->latest('timestamp')->limit(10)->get(),
             'salesTrends' => $salesTrends,

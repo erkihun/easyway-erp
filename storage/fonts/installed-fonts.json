@@ -1,6 +1,18 @@
 {
     "notosansethiopiclocal": {
-        "normal": "C:\\Users\\Erkis\\Documents\\GitHub\\erp-system\\storage\\fonts\/notosansethiopiclocal_normal_7836e0b67c2468acc8b74278cea60245",
-        "bold": "notosansethiopiclocal_bold_34f870584cc1891dfa2d65b2df8c787c"
+        "normal": "notosansethiopiclocal_normal_7836e0b67c2468acc8b74278cea60245",
+        "bold": "C:\\Users\\Erkis\\Documents\\GitHub\\erp-system\\storage\\fonts\/\/notosansethiopiclocal_bold_34f870584cc1891dfa2d65b2df8c787c"
+    },
+    "abyssinica sil": {
+        "normal": "abyssinica_sil_normal_f1567e024e5e6dcf32aaa2ee8c3a68c1"
+    },
+    "open sans": {
+        "normal": "open_sans_normal_842fd2347fc55eb5cce04b45d7f72395"
+    },
+    "noto sans ethiopic": {
+        "normal": "noto_sans_ethiopic_normal_7836e0b67c2468acc8b74278cea60245"
+    },
+    "inter": {
+        "normal": "inter_normal_1b586e96965a21c9cb40ed19ddc346d4"
     }
 }

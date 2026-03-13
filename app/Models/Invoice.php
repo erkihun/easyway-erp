@@ -21,6 +21,7 @@ class Invoice extends BaseModel
             'status' => InvoiceStatus::class,
             'invoice_date' => 'date',
             'due_date' => 'date',
+            'currency' => 'string',
             'total_amount' => 'decimal:4',
             'paid_amount' => 'decimal:4',
         ];
@@ -34,5 +35,15 @@ class Invoice extends BaseModel
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function creditNotes(): HasMany
+    {
+        return $this->hasMany(CreditNote::class);
+    }
+
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class);
     }
 }

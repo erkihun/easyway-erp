@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\InvoiceStatus;
 use App\Enums\PaymentStatus;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 
 class PaymentService
 {
-    public function __construct(private readonly JournalService $journalService)
+    public function __construct(
+        private readonly JournalService $journalService,
+        private readonly BillingService $billingService,
+    )
     {
     }
 
@@ -25,15 +27,15 @@ class PaymentService
                 'payment_number' => $payload['payment_number'] ?? 'PAY-'.now()->format('YmdHis'),
                 'status' => PaymentStatus::Completed,
                 'method' => $payload['method'] ?? 'cash',
+                'reference' => $payload['reference'] ?? null,
                 'amount' => $payload['amount'],
+                'notes' => $payload['notes'] ?? null,
                 'payment_date' => $payload['payment_date'] ?? now()->toDateString(),
             ]);
 
             $invoice->paid_amount = (float) $invoice->paid_amount + (float) $payment->amount;
-            $invoice->status = ((float) $invoice->paid_amount >= (float) $invoice->total_amount)
-                ? InvoiceStatus::Paid
-                : InvoiceStatus::PartiallyPaid;
             $invoice->save();
+            $this->billingService->recalculateInvoiceStatus($invoice);
 
             $this->journalService->postSimpleEntry(
                 'PAY-'.now()->format('YmdHisv'),

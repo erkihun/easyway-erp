@@ -20,7 +20,7 @@
             @endif
         </label>
     @endif
-    <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" @if($required) required @endif {{ $attributes }}>{{ old($name, $slot) }}</textarea>
+    <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" @if($required) required @endif {{ $attributes->merge(['class' => 'form-control']) }}>{{ old($name, $slot) }}</textarea>
     @if($help)
         <div class="field-help">{{ $help }}</div>
     @endif

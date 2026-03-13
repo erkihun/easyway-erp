@@ -29,5 +29,7 @@
     }
 @endphp
 
-<span class="badge badge-{{ $tone }}">{{ $label }}</span>
+<x-ui.badge :tone="$tone">
+    {{ $label }}
+</x-ui.badge>
 

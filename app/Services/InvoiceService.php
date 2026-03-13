@@ -14,10 +14,12 @@ class InvoiceService
         return Invoice::create([
             'invoice_number' => $payload['invoice_number'] ?? 'INV-'.now()->format('YmdHis'),
             'sales_order_id' => $payload['sales_order_id'] ?? null,
-            'status' => $payload['status'] ?? InvoiceStatus::Issued,
+            'status' => $payload['status'] ?? InvoiceStatus::Draft,
             'invoice_date' => $payload['invoice_date'] ?? now()->toDateString(),
             'due_date' => $payload['due_date'] ?? null,
+            'currency' => $payload['currency'] ?? 'ETB',
             'total_amount' => $payload['total_amount'] ?? 0,
+            'notes' => $payload['notes'] ?? null,
             'created_by' => $payload['created_by'] ?? auth()->id(),
         ]);
     }

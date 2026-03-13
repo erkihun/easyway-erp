@@ -1,6 +1,6 @@
 <div {{ $attributes->merge(['class' => 'panel']) }}>
     @if(trim((string)($header ?? '')) !== '')
-        <div class="panel-body" style="border-bottom:1px solid var(--line);padding-bottom:.55rem;">
+        <div class="panel-body panel-head">
             {{ $header }}
         </div>
     @endif
@@ -8,7 +8,7 @@
         {{ $slot }}
     </div>
     @if(trim((string)($footer ?? '')) !== '')
-        <div class="panel-body" style="border-top:1px solid var(--line);padding-top:.55rem;">
+        <div class="panel-body panel-foot">
             {{ $footer }}
         </div>
     @endif

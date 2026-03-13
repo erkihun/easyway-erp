@@ -7,11 +7,14 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GoodsReceiptController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ManufacturingController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProductBrandController;
+use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReportPageController;
 use App\Http\Controllers\Admin\RoleController;
@@ -21,8 +24,10 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WarehouseController;
+use App\Http\Controllers\Admin\CreditNoteController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function (): void {
@@ -33,11 +38,19 @@ Route::middleware('guest')->group(function (): void {
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::post('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 Route::redirect('/', '/admin/dashboard');
+Route::middleware(['auth'])->group(function (): void {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::resource('products', ProductController::class)->middleware('permission:create_products|update_products|delete_products');
+    Route::resource('products', ProductController::class)->middleware('permission:view_products|create_products|update_products|delete_products');
+    Route::resource('product-categories', ProductCategoryController::class)->except(['show'])->middleware('permission:view_categories|create_categories|update_categories|delete_categories');
+    Route::resource('product-brands', ProductBrandController::class)->except(['show'])->middleware('permission:view_brands|create_brands|update_brands|delete_brands');
     Route::post('products/import', [ProductController::class, 'import'])->name('products.import')->middleware('permission:create_products');
     Route::get('products/export', [ProductController::class, 'export'])->name('products.export')->middleware('permission:view_reports');
     Route::get('products/{product}/barcode', [ProductController::class, 'barcode'])->name('products.barcode')->middleware('permission:create_products|update_products');
@@ -60,9 +73,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function ():
 
     Route::resource('sales', SalesOrderController::class)->only(['index', 'create', 'store', 'show'])->middleware('permission:create_orders');
 
-    Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'show'])->middleware('permission:manage_accounting|create_orders');
-    Route::post('invoices/payments', [InvoiceController::class, 'recordPayment'])->name('invoices.payments')->middleware('permission:manage_accounting');
+    Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update'])->middleware('permission:manage_accounting|create_orders|view_invoices|create_invoices|update_invoices|delete_invoices');
+    Route::post('invoices/payments', [InvoiceController::class, 'recordPayment'])->name('invoices.payments')->middleware('permission:manage_accounting|register_payments');
     Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf')->middleware('permission:create_orders|manage_accounting');
+    Route::resource('payments', PaymentController::class)->only(['index', 'create', 'store', 'show'])->middleware('permission:manage_accounting|register_payments');
+    Route::resource('credit-notes', CreditNoteController::class)->only(['index', 'create', 'store', 'show'])->middleware('permission:manage_accounting|manage_credit_notes');
+    Route::post('refunds', [CreditNoteController::class, 'storeRefund'])->name('refunds.store')->middleware('permission:manage_accounting|manage_credit_notes');
 
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index')->middleware('permission:create_orders|manage_users');
     Route::get('customers/create', [CustomerController::class, 'create'])->name('customers.create')->middleware('permission:create_orders|manage_users');

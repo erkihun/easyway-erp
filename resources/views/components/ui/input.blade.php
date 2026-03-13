@@ -21,7 +21,7 @@
             @endif
         </label>
     @endif
-    <input id="{{ $name }}" name="{{ $name }}" value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}" @if($required) required @endif {{ $attributes }}>
+    <input id="{{ $name }}" name="{{ $name }}" value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}" @if($required) required @endif {{ $attributes->merge(['class' => 'form-control']) }}>
     @if($help)
         <div class="field-help">{{ $help }}</div>
     @endif

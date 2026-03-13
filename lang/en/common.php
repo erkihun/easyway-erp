@@ -83,6 +83,7 @@ return [
     'entry' => 'Entry',
     'reference' => 'Reference',
     'memo' => 'Memo',
+    'reason' => 'Reason',
     'items' => 'Items',
     'line_items' => 'Line Items',
     'purchase_items' => 'Purchase Items',

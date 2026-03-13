@@ -19,7 +19,7 @@
             @endif
         </label>
     @endif
-    <select id="{{ $name }}" name="{{ $name }}" @if($required) required @endif {{ $attributes }}>
+    <select id="{{ $name }}" name="{{ $name }}" @if($required) required @endif {{ $attributes->merge(['class' => 'form-control']) }}>
         {{ $slot }}
     </select>
     @if($help)

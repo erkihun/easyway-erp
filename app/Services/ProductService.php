@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
@@ -21,8 +21,10 @@ class ProductService
      */
     public function create(array $data): Product
     {
-        $data['sku'] ??= $this->generateSku((string) $data['name']);
-        $data['barcode'] ??= $this->barcodeService->make((string) now()->format('Uu'));
+        $data['sku'] = $this->normalizeOrGenerateSku($data['sku'] ?? null, (string) $data['name']);
+        $data['barcode'] = $this->normalizeOrGenerateBarcode($data['barcode'] ?? null);
+        $data['selling_price'] = $this->normalizeDecimal($data['selling_price'] ?? null);
+        $data['cost_price'] = $this->normalizeDecimal($data['cost_price'] ?? null);
 
         /** @var Product $product */
         $product = Product::create(Arr::except($data, ['image']));
@@ -37,13 +39,13 @@ class ProductService
      */
     public function update(Product $product, array $data): Product
     {
-        $product->fill(Arr::except($data, ['image']));
-        if (empty($product->sku)) {
-            $product->sku = $this->generateSku($product->name);
-        }
-        if (empty($product->barcode)) {
-            $product->barcode = $this->barcodeService->make((string) now()->format('Uu'));
-        }
+        $payload = Arr::except($data, ['image']);
+        $payload['sku'] = $this->normalizeOrGenerateSku($payload['sku'] ?? null, (string) ($payload['name'] ?? $product->name));
+        $payload['barcode'] = $this->normalizeOrGenerateBarcode($payload['barcode'] ?? null);
+        $payload['selling_price'] = $this->normalizeDecimal($payload['selling_price'] ?? null);
+        $payload['cost_price'] = $this->normalizeDecimal($payload['cost_price'] ?? null);
+
+        $product->fill($payload);
         $product->save();
 
         $this->storeImageIfProvided($product, $data);
@@ -66,9 +68,38 @@ class ProductService
         }
 
         $path = $data['image']->store('products', 'public');
+
+        ProductImage::query()
+            ->where('product_id', $product->id)
+            ->where('is_primary', true)
+            ->update(['is_primary' => false]);
+
         $product->images()->create([
-            'path' => Storage::url($path),
+            'path' => $path,
             'is_primary' => true,
         ]);
+    }
+
+    private function normalizeOrGenerateSku(mixed $sku, string $name): string
+    {
+        $value = trim((string) $sku);
+
+        return $value !== '' ? $value : $this->generateSku($name);
+    }
+
+    private function normalizeOrGenerateBarcode(mixed $barcode): string
+    {
+        $value = trim((string) $barcode);
+
+        return $value !== '' ? $value : $this->barcodeService->make((string) now()->format('Uu'));
+    }
+
+    private function normalizeDecimal(mixed $value): float
+    {
+        if ($value === null || $value === '') {
+            return 0.0;
+        }
+
+        return max(0.0, (float) $value);
     }
 }

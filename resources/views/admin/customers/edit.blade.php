@@ -4,6 +4,13 @@
 @section('content')
 <x-ui.page-header :title="__('customers.edit')" :subtitle="__('customers.subtitle')" icon="heroicon-o-pencil-square" />
 
+<div class="kpi-grid mb-1">
+    <x-ui.stat-card :label="__('invoice.total_invoices')" :value="number_format((int) ($billingSummary['total_invoices'] ?? 0))" icon="heroicon-o-document-text" />
+    <x-ui.stat-card :label="__('invoice.paid_amount')" :value="number_format((float) ($billingSummary['total_paid'] ?? 0), 2)" icon="heroicon-o-check-circle" tone="success" />
+    <x-ui.stat-card :label="__('invoice.balance_due')" :value="number_format((float) ($billingSummary['outstanding_balance'] ?? 0), 2)" icon="heroicon-o-exclamation-triangle" tone="warning" />
+    <x-ui.stat-card :label="__('payment.payment_date')" :value="(string) ($billingSummary['last_payment_date'] ?? '-')" icon="heroicon-o-calendar-days" tone="info" />
+</div>
+
 <div class="panel">
     <div class="panel-body">
         <form method="POST" action="{{ route('admin.customers.update',$customer) }}">
@@ -34,4 +41,3 @@
     </div>
 </div>
 @endsection
-

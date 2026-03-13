@@ -5,6 +5,7 @@
     $systemName = (string) ($appSettings['system_name'] ?? __('navigation.erp_platform'));
     $systemLogoUrl = $appSettings['logo_url'] ?? $appSettings['system_logo_url'] ?? null;
     $roleName = $user?->roles()->pluck('name')->first() ?? __('common.user');
+    $profilePhotoUrl = $user?->profile_photo_url;
 
     $nameParts = preg_split('/\s+/', trim((string) ($user?->name ?? __('common.user')))) ?: [];
     $initials = collect($nameParts)->filter()->map(fn(string $part): string => strtoupper(substr($part, 0, 1)))->take(2)->implode('');
@@ -23,6 +24,8 @@
             'label' => __('common.catalog'),
             'items' => [
                 ['label' => __('navigation.products'), 'route' => 'admin.products.index', 'active' => 'admin.products.*', 'icon' => 'heroicon-o-cube', 'permissions' => ['view_products', 'create_products', 'update_products', 'delete_products']],
+                ['label' => __('navigation.product_categories'), 'route' => 'admin.product-categories.index', 'active' => 'admin.product-categories.*', 'icon' => 'heroicon-o-squares-2x2', 'permissions' => ['view_categories', 'create_categories', 'update_categories', 'delete_categories']],
+                ['label' => __('navigation.product_brands'), 'route' => 'admin.product-brands.index', 'active' => 'admin.product-brands.*', 'icon' => 'heroicon-o-tag', 'permissions' => ['view_brands', 'create_brands', 'update_brands', 'delete_brands']],
                 ['label' => __('navigation.inventory'), 'route' => 'admin.inventory.index', 'active' => 'admin.inventory.*', 'icon' => 'heroicon-o-archive-box', 'permissions' => ['manage_stock']],
                 ['label' => __('inventory.ledger'), 'route' => 'admin.inventory.ledger', 'active' => 'admin.inventory.ledger', 'icon' => 'heroicon-o-book-open', 'permissions' => ['manage_stock']],
                 ['label' => __('inventory.movements'), 'route' => 'admin.inventory.movements', 'active' => 'admin.inventory.movements', 'icon' => 'heroicon-o-arrow-path', 'permissions' => ['manage_stock']],
@@ -54,6 +57,9 @@
             'label' => __('common.finance'),
             'items' => [
                 ['label' => __('navigation.accounting'), 'route' => 'admin.accounting.index', 'active' => 'admin.accounting.*', 'icon' => 'heroicon-o-calculator', 'permissions' => ['manage_accounting']],
+                ['label' => __('invoice.title'), 'route' => 'admin.invoices.index', 'active' => 'admin.invoices.*', 'icon' => 'heroicon-o-document-text', 'permissions' => ['manage_accounting', 'create_orders', 'view_invoices', 'create_invoices', 'update_invoices', 'delete_invoices']],
+                ['label' => __('payment.title'), 'route' => 'admin.payments.index', 'active' => 'admin.payments.*', 'icon' => 'heroicon-o-credit-card', 'permissions' => ['manage_accounting', 'register_payments']],
+                ['label' => __('credit_note.title'), 'route' => 'admin.credit-notes.index', 'active' => 'admin.credit-notes.*', 'icon' => 'heroicon-o-receipt-percent', 'permissions' => ['manage_accounting', 'manage_credit_notes']],
                 ['label' => __('navigation.reports'), 'route' => 'admin.reports.index', 'active' => 'admin.reports.*', 'icon' => 'heroicon-o-chart-bar', 'permissions' => ['view_reports']],
             ],
         ],
@@ -61,6 +67,7 @@
             'label' => __('common.administration'),
             'items' => [
                 ['label' => __('navigation.users'), 'route' => 'admin.users.index', 'active' => 'admin.users.*', 'icon' => 'heroicon-o-user-group', 'permissions' => ['view_users', 'create_users', 'update_users', 'delete_users', 'manage_users']],
+                ['label' => __('navigation.my_profile'), 'route' => 'profile.show', 'active' => 'profile.*', 'icon' => 'heroicon-o-user-circle', 'permissions' => null],
                 ['label' => __('navigation.roles'), 'route' => 'admin.roles.index', 'active' => 'admin.roles.*', 'icon' => 'heroicon-o-shield-check', 'permissions' => ['view_roles', 'create_roles', 'update_roles', 'delete_roles', 'manage_users']],
                 ['label' => __('navigation.permissions'), 'route' => 'admin.permissions.index', 'active' => 'admin.permissions.*', 'icon' => 'heroicon-o-lock-closed', 'permissions' => ['view_permissions', 'manage_users']],
                 ['label' => __('navigation.settings'), 'route' => 'admin.settings.index', 'active' => 'admin.settings.*', 'icon' => 'heroicon-o-cog-6-tooth', 'permissions' => ['manage_settings']],
@@ -130,14 +137,26 @@
     </nav>
 
     <div class="sidebar-user-panel" x-show="{{ $showLabelExpression }}" x-transition.opacity>
-        <div class="sidebar-avatar" aria-hidden="true">{{ $initials }}</div>
+        <div class="sidebar-avatar" aria-hidden="true">
+            @if($profilePhotoUrl)
+                <img src="{{ $profilePhotoUrl }}" alt="{{ $user?->name }}" class="avatar-image" />
+            @else
+                {{ $initials }}
+            @endif
+        </div>
         <div class="sidebar-user-meta">
             <div class="sidebar-user-name">{{ $user?->name }}</div>
             <div class="sidebar-user-role">{{ $roleName }}</div>
         </div>
     </div>
     <div class="sidebar-user-panel" x-show="{{ $isMobile ? 'false' : 'sidebarCollapsed' }}" x-transition.opacity data-tooltip="{{ $user?->name }}">
-        <div class="sidebar-avatar" aria-hidden="true">{{ $initials }}</div>
+        <div class="sidebar-avatar" aria-hidden="true">
+            @if($profilePhotoUrl)
+                <img src="{{ $profilePhotoUrl }}" alt="{{ $user?->name }}" class="avatar-image" />
+            @else
+                {{ $initials }}
+            @endif
+        </div>
     </div>
 
     <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('{{ __('common.logout_confirm') }}')">

@@ -132,6 +132,10 @@
         <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.out_of_stock')" :value="number_format((float)count($outOfStockItems))" icon="heroicon-o-no-symbol" tone="danger" :helper="__('dashboard.needs_replenishment')" /></div>
         <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.today_sales')" :value="number_format($todaySales,2)" icon="heroicon-o-banknotes" tone="success" :helper="__('dashboard.confirmed_totals')" /></div>
         <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.monthly_revenue')" :value="number_format($monthlyRevenue,2)" icon="heroicon-o-chart-bar" tone="info" :helper="__('dashboard.current_month')" /></div>
+        <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.invoices_this_month')" :value="number_format((float)$invoicesThisMonth)" icon="heroicon-o-document-text" tone="info" /></div>
+        <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.outstanding_payments')" :value="number_format((float)$outstandingPayments,2)" icon="heroicon-o-exclamation-triangle" tone="warning" /></div>
+        <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.overdue_invoices')" :value="number_format((float)$overdueInvoices)" icon="heroicon-o-x-circle" tone="danger" /></div>
+        <div class="kpi-grid-item"><x-ui.stat-card :label="__('dashboard.total_revenue')" :value="number_format((float)$monthlyRevenue,2)" icon="heroicon-o-currency-dollar" tone="success" /></div>
     </div>
 
     <div class="row-grid row-charts grid grid-cols-1 xl:grid-cols-3 gap-6">

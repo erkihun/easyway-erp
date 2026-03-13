@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\Invoice;
+use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,9 +42,28 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer): View
     {
+        $invoiceQuery = Invoice::query()
+            ->whereHas('salesOrder', fn ($query) => $query->where('customer_id', $customer->id));
+        $invoiceIds = (clone $invoiceQuery)->pluck('id');
+
+        $totalInvoices = $invoiceIds->count();
+        $totalPaid = (float) Payment::query()->whereIn('invoice_id', $invoiceIds)->sum('amount');
+        $totalInvoiced = (float) (clone $invoiceQuery)->sum('total_amount');
+        $totalCredits = (float) \App\Models\CreditNote::query()->whereIn('invoice_id', $invoiceIds)->sum('amount');
+        $totalRefunds = (float) \App\Models\Refund::query()->whereIn('invoice_id', $invoiceIds)->sum('amount');
+        $outstandingBalance = max(0, ($totalInvoiced - $totalCredits) - $totalPaid);
+        $lastPayment = Payment::query()->whereIn('invoice_id', $invoiceIds)->latest('payment_date')->first();
+
         return view('admin.customers.edit', [
             'customer' => $customer,
             'groups' => CustomerGroup::query()->orderBy('name')->get(),
+            'billingSummary' => [
+                'total_invoices' => $totalInvoices,
+                'total_paid' => $totalPaid,
+                'outstanding_balance' => $outstandingBalance,
+                'last_payment_date' => $lastPayment?->payment_date?->format('Y-m-d'),
+                'total_refunds' => $totalRefunds,
+            ],
         ]);
     }
 

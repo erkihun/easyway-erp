@@ -27,4 +27,5 @@ class Payment extends BaseModel
     {
         return $this->belongsTo(Invoice::class);
     }
+
 }

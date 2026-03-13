@@ -9,7 +9,7 @@ class StoreProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create_products') || false;
     }
 
     /**
@@ -25,9 +25,11 @@ class StoreProductRequest extends FormRequest
             'product_category_id' => ['nullable', 'uuid', 'exists:product_categories,id'],
             'product_brand_id' => ['nullable', 'uuid', 'exists:product_brands,id'],
             'unit_of_measure_id' => ['nullable', 'uuid', 'exists:units_of_measure,id'],
+            'selling_price' => ['nullable', 'numeric', 'min:0'],
+            'cost_price' => ['nullable', 'numeric', 'min:0'],
             'low_stock_threshold' => ['nullable', 'numeric', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ];
     }
 }

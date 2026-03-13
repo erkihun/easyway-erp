@@ -36,4 +36,9 @@ class SalesOrder extends BaseModel
     {
         return $this->hasMany(SalesOrderItem::class);
     }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

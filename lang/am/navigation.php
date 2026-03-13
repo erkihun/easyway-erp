@@ -5,6 +5,8 @@ declare(strict_types=1);
 return [
     'dashboard' => 'ዳሽቦርድ',
     'products' => 'ምርቶች',
+    'product_categories' => 'የምርት ምድቦች',
+    'product_brands' => 'የምርት ብራንዶች',
     'inventory' => 'እቃ ቆጠራ',
     'warehouses' => 'መጋዘኖች',
     'manufacturing' => 'ማምረቻ',
@@ -17,6 +19,7 @@ return [
     'accounting' => 'ሂሳብ',
     'reports' => 'ሪፖርቶች',
     'users' => 'ተጠቃሚዎች',
+    'my_profile' => 'የእኔ ፕሮፋይል',
     'roles' => 'ሚናዎች',
     'permissions' => 'ፈቃዶች',
     'settings' => 'ቅንብሮች',
