@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'panel']) }}>
+<div {{ $attributes->merge(['class' => 'panel glass-card']) }}>
     @if(trim((string)($header ?? '')) !== '')
         <div class="panel-body panel-head">
             {{ $header }}

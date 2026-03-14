@@ -4,7 +4,7 @@
     'icon' => 'heroicon-o-chart-bar',
 ])
 
-<div class="panel">
+<div class="panel glass-card">
     <div class="panel-body">
         <div class="chart-card-head">
             <div>

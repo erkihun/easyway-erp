@@ -113,6 +113,11 @@
             <div class="sidebar-brand-title">{{ $systemName }}</div>
             <div class="sidebar-brand-subtitle">{{ __('navigation.operations_console') }}</div>
         </div>
+        @if($isMobile)
+            <button type="button" class="icon-btn mobile-only" @click="sidebarOpen = false" aria-label="{{ __('common.close') }}">
+                <x-heroicon-o-x-mark class="h-5 w-5" />
+            </button>
+        @endif
     </div>
 
     <nav class="sidebar-nav" aria-label="{{ __('common.actions') }}">
@@ -136,7 +141,7 @@
         @endforeach
     </nav>
 
-    <div class="sidebar-user-panel" x-show="{{ $showLabelExpression }}" x-transition.opacity>
+    <div class="sidebar-user-panel" x-show="{{ $showLabelExpression }}" x-transition.opacity data-tooltip="{{ $user?->name }}">
         <div class="sidebar-avatar" aria-hidden="true">
             @if($profilePhotoUrl)
                 <img src="{{ $profilePhotoUrl }}" alt="{{ $user?->name }}" class="avatar-image" />
@@ -162,11 +167,12 @@
     <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('{{ __('common.logout_confirm') }}')">
         @csrf
         <button type="submit" class="sidebar-item sidebar-logout flex items-center gap-2" data-tooltip="{{ __('common.logout') }}">
-            <x-heroicon-o-arrow-left-on-rectangle class="h-5 w-5 sidebar-item-icon" />
+            <span class="sidebar-item-icon-wrap" aria-hidden="true">
+                <i data-lucide="log-out" class="sidebar-item-icon"></i>
+            </span>
             <span class="sidebar-item-label" x-show="{{ $showLabelExpression }}" x-transition.opacity>{{ __('common.logout') }}</span>
         </button>
     </form>
 </div>
-
 
 
